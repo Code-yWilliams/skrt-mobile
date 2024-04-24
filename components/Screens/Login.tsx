@@ -1,10 +1,6 @@
 import { Button, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated'
+import Animated, { useSharedValue, withSpring } from 'react-native-reanimated'
 import { useState } from 'react'
 
 const LoginScreen = () => {
