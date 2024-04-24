@@ -1,9 +1,9 @@
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import config from 'config'
 import humps from 'humps'
-
 import DeviceStorage from '~lib/utils/DeviceStorage'
 
-const { HOST } = config
+const { HOST, BASE_PATH } = config
 
 type ApiError = {
   code: string
@@ -28,69 +28,80 @@ export const getApiError = (e: any): ApiError | undefined => {
 }
 
 class Base {
-  protected static async request<T>(
-    url: string,
-    method: string,
-    data: any,
-    config = {},
-  ) {
-    const fullUrl = `${HOST}/api/v1${url}`
-    const Authorization = await this.authHeader()
-    const headers = {
-      'User-Agent': 'skrt-mobile',
-      'Content-Type': 'application/json',
-      Authorization,
-    }
+  private static httpClient: AxiosInstance
 
-    const transformedData = humps.decamelizeKeys(data)
+  constructor() {
+    Base.httpClient = axios.create({
+      baseURL: `${HOST}${BASE_PATH}`,
+      headers: {
+        'User-Agent': 'skrt-mobile',
+        'Content-Type': 'application/json',
+      },
+      transformRequest: (data) => JSON.stringify(humps.decamelizeKeys(data)),
+      transformResponse: (data) => {
+        try {
+          return humps.camelizeKeys(JSON.parse(data))
+        } catch (e) {
+          return data
+        }
+      },
+    })
 
-    const fetchConfig = {
-      method,
-      headers,
-      ...(data ? { body: JSON.stringify(transformedData) } : {}),
-      ...(config ? config : {}),
-    }
-
-    const response = await fetch(fullUrl, fetchConfig)
-
-    try {
-      const json = await response.json()
-      if (!response.ok) {
-        return Promise.reject(json)
+    Base.httpClient.interceptors.request.use(async (config) => {
+      const authToken = await Base.getAuthToken()
+      if (authToken) {
+        config.headers.Authorization = `Bearer ${authToken}`
       }
-      return humps.camelizeKeys(json) as T
-    } catch {
-      const text = await response.clone().text()
-      return Promise.reject(text) // Reject with response text if JSON parsing fails
-    }
+      return config
+    })
   }
 
-  protected static get<T>(url: string, config = {}) {
-    return this.request<T>(url, 'GET', undefined, config)
-  }
-
-  protected static put<T>(url: string, data = {}, config = {}) {
-    return this.request<T>(url, 'PUT', data, config)
-  }
-
-  protected static patch<T>(url: string, data = {}, config = {}) {
-    return this.request<T>(url, 'PATCH', data, config)
-  }
-
-  protected static post<T>(url: string, data = {}, config = {}) {
-    return this.request<T>(url, 'POST', data, config)
-  }
-
-  protected static delete<T>(url: string, data = {}, config = {}) {
-    return this.request<T>(url, 'DELETE', data, config)
-  }
-
-  private static async authHeader() {
+  private static async getAuthToken(): Promise<string | undefined> {
     const storedUser = await DeviceStorage.getSecureItem('user')
-    if (!storedUser) return ''
+    return storedUser?.authToken
+  }
 
-    const { email, authToken } = storedUser
-    return `Bearer ${authToken}`
+  protected static async get<T>(
+    url: string,
+    config: AxiosRequestConfig = {},
+  ): Promise<T> {
+    const response = await Base.httpClient.get<T>(url, config)
+    return response.data
+  }
+
+  protected static async put<T>(
+    url: string,
+    data = {},
+    config: AxiosRequestConfig = {},
+  ): Promise<T> {
+    const response = await Base.httpClient.put<T>(url, data, config)
+    return response.data
+  }
+
+  protected static async patch<T>(
+    url: string,
+    data = {},
+    config: AxiosRequestConfig = {},
+  ): Promise<T> {
+    const response = await Base.httpClient.patch<T>(url, data, config)
+    return response.data
+  }
+
+  protected static async post<T>(
+    url: string,
+    data = {},
+    config: AxiosRequestConfig = {},
+  ): Promise<T> {
+    const response = await Base.httpClient.post<T>(url, data, config)
+    return response.data
+  }
+
+  protected static async delete<T>(
+    url: string,
+    config: AxiosRequestConfig = {},
+  ): Promise<T> {
+    const response = await Base.httpClient.delete<T>(url, config)
+    return response.data
   }
 }
 
