@@ -1,3 +1,4 @@
+import { styled } from 'nativewind'
 import React from 'react'
 import {
   ActivityIndicator,
@@ -22,7 +23,7 @@ export const ThemedButton = React.forwardRef(
       onPress,
       disabled,
       loading,
-      variant,
+      variant = 'primary',
       children,
       compressed,
       endIcon,
@@ -31,11 +32,11 @@ export const ThemedButton = React.forwardRef(
     }: ThemedButtonProps,
     _,
   ) => {
-    const height = compressed ? 'h-[32px]' : 'h-[40px]'
-    const textColor = variant === 'primary' ? 'text-white' : 'text-blue-500'
+    const height = compressed ? 'h-[32px]' : 'h-[50px]'
+    const textColor = variant === 'primary' ? 'text-white' : 'text-green-500'
     const backgroundColor = (() => {
       if (variant === 'primary') {
-        return 'bg-blue-500'
+        return 'bg-green-500'
       } else if (variant === 'secondary') {
         return 'bg-white'
       }
@@ -46,7 +47,7 @@ export const ThemedButton = React.forwardRef(
 
     return (
       <TouchableOpacity
-        className={`${height} border-blue-500 items-center justify-center px-2 flex-row rounded ${backgroundColor} ${textColor} ${disabledStyle} ${borderStyle}`}
+        className={`${height} border-green-500 items-center justify-center px-2 flex-row rounded-full ${backgroundColor} ${textColor} ${disabledStyle} ${borderStyle}`}
         style={style}
         onPress={onPress}
         disabled={disabled ?? loading}
