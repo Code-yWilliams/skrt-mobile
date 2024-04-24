@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 
 import { ThemedInputLabel } from '~components/themed/ThemedInputLabel'
-import { t } from '~lib/i18n'
+import { t } from 'i18next'
 import { colors } from 'theme'
 
 import { ThemedText } from './ThemedText'
@@ -24,6 +24,7 @@ export type ThemedTextInputProps = TextInputProps & {
   labelClassName?: string
   adornment?: React.ReactNode
   adornmentPosition?: 'start' | 'end'
+  variant?: 'default' | 'rounded'
 }
 
 export const ThemedTextInput = React.forwardRef(
@@ -41,6 +42,7 @@ export const ThemedTextInput = React.forwardRef(
       multiline,
       adornment,
       adornmentPosition = 'start',
+      variant = 'default',
       ...otherProps
     }: ThemedTextInputProps,
     ref: React.Ref<TextInput>,
@@ -55,6 +57,7 @@ export const ThemedTextInput = React.forwardRef(
     const paddingVertical = multiline ? 'py-2' : 'py-1'
     const inputBasis =
       adornment && adornmentPosition === 'end' ? 'basis-[90%]' : 'basis-[100%]'
+    const rounded = variant === 'rounded' ? 'rounded-full' : 'rounded'
 
     const inputAccessoryViewID = useMemo(() => {
       return `inputAccessoryViewID-${Math.random()}`
@@ -68,7 +71,7 @@ export const ThemedTextInput = React.forwardRef(
           </ThemedInputLabel>
         )}
         <View
-          className={`${bgColor} flex-row items-center justify-between rounded overflow-hidden ${width}`}
+          className={`${bgColor} flex-row items-center justify-between overflow-hidden ${width} ${rounded}`}
         >
           {adornment && adornmentPosition === 'start' && (
             <View className="pl-4">{adornment}</View>
@@ -79,7 +82,7 @@ export const ThemedTextInput = React.forwardRef(
             multiline={multiline}
             textAlignVertical={multiline ? 'top' : 'auto'}
             placeholderTextColor={error ? colors.red[500] : undefined}
-            className={`${inputBasis} ${height} bg-transparent text-gray-600 border-gray-300 rounded border-1 ${paddingVertical} px-2 border-radius-1 text-base leading-5 ${inputClassName}`}
+            className={`${inputBasis} ${height} bg-transparent text-gray-600 border-gray-300 rounded border-1 ${paddingVertical} px-4 border-radius-1 text-base leading-5 ${inputClassName}`}
             {...otherProps}
           />
           {adornment && adornmentPosition === 'end' && (
