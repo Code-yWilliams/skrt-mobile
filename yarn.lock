@@ -2454,6 +2454,39 @@
   dependencies:
     "@sinonjs/commons" "^3.0.0"
 
+"@tanstack/query-async-storage-persister@^5.32.0":
+  version "5.32.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-async-storage-persister/-/query-async-storage-persister-5.32.0.tgz#e95201b2508f5bc8da450a6723003b7074ab7271"
+  integrity sha512-wPtiXYz3twJ5bNmR1RNDlUW+LV9U1sG9pla4CJgEyP6H2gszLAFjDoCtx7SdifMnORemTVlypQHoa5my4oVCTw==
+  dependencies:
+    "@tanstack/query-persist-client-core" "5.32.0"
+
+"@tanstack/query-core@5.32.0":
+  version "5.32.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.32.0.tgz#e097ec2b394a2f64de33c98cd8baf3525c99641a"
+  integrity sha512-Z3flEgCat55DRXU5UMwYU1U+DgFZKA3iufyOKs+II7iRAo0uXkeU7PH5e6sOH1CGEag0IpKmZxlUFpCg6roSKw==
+
+"@tanstack/query-persist-client-core@5.32.0":
+  version "5.32.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-5.32.0.tgz#4cda309bdd1aba56f0958fc918a062f682c60625"
+  integrity sha512-+DG5g+ife4rxcMmvtY+AedG4f++V4sxUVSmXKEo2SqIB12iaE+OwQ1CiHFbvlcCr/q3MaCOO5p5uBTonkqBtCA==
+  dependencies:
+    "@tanstack/query-core" "5.32.0"
+
+"@tanstack/react-query-persist-client@^5.32.0":
+  version "5.32.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-5.32.0.tgz#4da58a858ca4ab99d7c2a1de71bf44d91d0bb3c4"
+  integrity sha512-+RvDOuoj4axgok+XrM54NFThum0uW2opFv2j0TKiLILOT0GDkfxHgJz/R+e0IzYCmlGkgjiqh4W0uupCLAEb6g==
+  dependencies:
+    "@tanstack/query-persist-client-core" "5.32.0"
+
+"@tanstack/react-query@^5.32.0":
+  version "5.32.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.32.0.tgz#52d441e7ad2a0098dc426f3834f68150c13f265b"
+  integrity sha512-+E3UudQtarnx9A6xhpgMZapyF+aJfNBGFMgI459FnduEZqT/9KhOWnMOneZahLRt52yzskSA0AuOyLkXHK0yBA==
+  dependencies:
+    "@tanstack/query-core" "5.32.0"
+
 "@tootallnate/once@2":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
@@ -7250,6 +7283,11 @@ react-native-screens@~3.29.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
+
+react-native-toast-message@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-2.2.0.tgz#c53a4746b15616858a7d61c4386b92cbe9fbf911"
+  integrity sha512-AFti8VzUk6JvyGAlLm9/BknTNDXrrhqnUk7ak/pM7uCTxDPveAu2ekszU0on6vnUPFnG04H/QfYE2IlETqeaWw==
 
 react-native-web@~0.19.6:
   version "0.19.10"
