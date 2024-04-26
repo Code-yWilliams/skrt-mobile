@@ -1,12 +1,18 @@
 import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
-import { setupI18n } from '~lib/i18n'
 import { Courgette_400Regular, useFonts } from '@expo-google-fonts/courgette'
+import Toast from 'react-native-toast-message'
+
+import { setupI18n } from '~lib/i18n'
+import toastConfig from '~lib/toaster/config'
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context'
 
 export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
+  ErrorBoundary, // Catch any errors thrown by the Layout component.
 } from 'expo-router'
 
 export const unstable_settings = {
@@ -16,20 +22,23 @@ export const unstable_settings = {
 
 setupI18n()
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync()
+SplashScreen.preventAutoHideAsync() // Prevent the splash screen from auto-hiding before asset loading is complete.
 
-export default function RootLayout() {
-  const error = false
+const RootLayoutNav = () => {
+  const insets = useSafeAreaInsets()
 
+  return (
+    <>
+      <Slot />
+      <Toast config={toastConfig} topOffset={insets.top} />
+    </>
+  )
+}
+
+const RootLayout = () => {
   const [fontsLoaded] = useFonts({
     Courgette_400Regular,
   })
-
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error
-  }, [error])
 
   useEffect(() => {
     if (fontsLoaded) {
@@ -41,9 +50,13 @@ export default function RootLayout() {
     return null
   }
 
-  return <RootLayoutNav />
+  return (
+    <>
+      <SafeAreaProvider>
+        <RootLayoutNav />
+      </SafeAreaProvider>
+    </>
+  )
 }
 
-function RootLayoutNav() {
-  return <Slot />
-}
+export default RootLayout
