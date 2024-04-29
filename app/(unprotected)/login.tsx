@@ -78,13 +78,13 @@ const Login = () => {
                     ) => void
                   }
                 >
-                  Log In
+                  {t('log_in')}
                 </ThemedButton>
               </>
             )}
           </Formik>
           <ThemedButton className="mt-4 w-full" variant="secondary">
-            Sign Up
+            {t('sign_up')}
           </ThemedButton>
         </ScrollView>
       </KeyboardAvoidingView>
