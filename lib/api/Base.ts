@@ -1,6 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import config from 'config'
 import humps from 'humps'
+import { AUTH_TOKEN_KEY } from '~lib/reactQuery/keys'
+import { queryClient } from '~lib/reactQuery/queryClient'
 import DeviceStorage from '~lib/utils/DeviceStorage'
 
 const { HOST, BASE_PATH } = config
@@ -28,27 +30,28 @@ export const getApiError = (e: any): ApiError | undefined => {
 }
 
 class Base {
-  private static httpClient: AxiosInstance
+  private static httpClient: AxiosInstance = axios.create({
+    baseURL: `${HOST}${BASE_PATH}`,
+    headers: {
+      'User-Agent': 'skrt-mobile',
+      'Content-Type': 'application/json',
+    },
+    transformRequest: (data) => {
+      return JSON.stringify(humps.decamelizeKeys(data))
+    },
+    transformResponse: (data) => {
+      try {
+        return humps.camelizeKeys(JSON.parse(data))
+      } catch (e) {
+        return data
+      }
+    },
+  })
 
-  constructor() {
-    Base.httpClient = axios.create({
-      baseURL: `${HOST}${BASE_PATH}`,
-      headers: {
-        'User-Agent': 'skrt-mobile',
-        'Content-Type': 'application/json',
-      },
-      transformRequest: (data) => JSON.stringify(humps.decamelizeKeys(data)),
-      transformResponse: (data) => {
-        try {
-          return humps.camelizeKeys(JSON.parse(data))
-        } catch (e) {
-          return data
-        }
-      },
-    })
+  private static setupInterceptors = () => {
+    this.httpClient.interceptors.request.use(async (config) => {
+      const authToken = await queryClient.getQueryData([AUTH_TOKEN_KEY])
 
-    Base.httpClient.interceptors.request.use(async (config) => {
-      const authToken = await Base.getAuthToken()
       if (authToken) {
         config.headers.Authorization = `Bearer ${authToken}`
       }

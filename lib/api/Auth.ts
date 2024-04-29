@@ -1,7 +1,17 @@
+import { IUser } from '@/interfaces/shared'
 import Base from './Base'
 
+export type LoginResponse = {
+  user: IUser
+  token: string
+}
+
+export type signupResponse = {
+  user: IUser
+}
+
 export class Auth extends Base {
-  static async login(email: string, password: string) {
+  static async login(email: string, password: string): Promise<LoginResponse> {
     const data = { email, password }
     return this.post('/login', data)
   }
