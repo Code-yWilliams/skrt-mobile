@@ -9,25 +9,10 @@ import {
 } from 'react-native'
 import { ThemedButton, ThemedTextInput } from '~components/themed'
 import { Formik } from 'formik'
-import { getApiError } from '~lib/api/Base'
-import { Auth } from '~lib/api/Auth'
+import { useAuthMutations } from '~lib/reactQuery/hooks/auth'
 
 const Login = () => {
-  const login = async ({
-    email,
-    password,
-  }: {
-    email: string
-    password: string
-  }) => {
-    try {
-      const response = await Auth.login(email, password)
-      console.log(response)
-    } catch (error) {
-      const apiError = getApiError(error)
-      console.log(apiError)
-    }
-  }
+  const { login } = useAuthMutations()
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center">
