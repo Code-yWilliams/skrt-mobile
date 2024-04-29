@@ -22,7 +22,7 @@ const asyncStoragePersister = createAsyncStoragePersister({
 })
 
 // Only these query keys are written to async storage disk
-const KEYS_TO_PERSIST = []
+const KEYS_TO_PERSIST: string[] = []
 
 const QueryClientProvider = ({ children }: { children: React.ReactNode }) => (
   <PersistQueryClientProvider
