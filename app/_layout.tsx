@@ -10,6 +10,7 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context'
+import { QueryClientProvider } from '~lib/reactQuery/queryClient'
 
 export {
   ErrorBoundary, // Catch any errors thrown by the Layout component.
@@ -52,9 +53,11 @@ const RootLayout = () => {
 
   return (
     <>
-      <SafeAreaProvider>
-        <RootLayoutNav />
-      </SafeAreaProvider>
+      <QueryClientProvider>
+        <SafeAreaProvider>
+          <RootLayoutNav />
+        </SafeAreaProvider>
+      </QueryClientProvider>
     </>
   )
 }
