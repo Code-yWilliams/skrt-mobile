@@ -1,0 +1,1 @@
+- when token refresh endpoint is created on server, look into a way to halt and preserve order of requests on the client while token is being refreshed
