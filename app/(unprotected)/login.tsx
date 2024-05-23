@@ -1,7 +1,6 @@
 import { colors } from '@/theme'
 import { t } from 'i18next'
 import {
-  GestureResponderEvent,
   KeyboardAvoidingView,
   SafeAreaView,
   ScrollView,
@@ -10,6 +9,7 @@ import {
 import { ThemedButton, ThemedTextInput } from '~components/themed'
 import { Formik } from 'formik'
 import { useAuthMutations } from '~lib/reactQuery/hooks/auth'
+import { GestureHandlerEvent } from 'react-native-reanimated/lib/typescript/reanimated2/hook'
 
 const Login = () => {
   const { login } = useAuthMutations()
@@ -58,9 +58,7 @@ const Login = () => {
                 <ThemedButton
                   className="mt-4 w-full"
                   onPress={
-                    handleSubmit as any as (
-                      event: GestureResponderEvent,
-                    ) => void
+                    handleSubmit as (e: GestureHandlerEvent<any>) => void
                   }
                 >
                   {t('log_in')}
