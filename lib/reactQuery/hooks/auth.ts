@@ -4,6 +4,8 @@ import { IUser } from '@/interfaces/shared'
 import { Auth } from '~lib/api/Auth'
 import DeviceStorage from '~lib/utils/DeviceStorage'
 import { queryClient } from '../queryClient'
+import toaster from '~lib/toaster'
+import { t } from 'i18next'
 
 export const useCurrentUser = () => {
   const { data } = useQuery({
@@ -74,7 +76,9 @@ export const useAuthMutations = () => {
       setCurrentUser(user)
       setAuthToken(token)
     },
-    onError: (error) => {},
+    onError: (e) => {
+      toaster.error(t('generic_error'))
+    },
   })
 
   const { mutate: logout } = useMutation({
