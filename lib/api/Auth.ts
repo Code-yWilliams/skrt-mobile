@@ -24,4 +24,9 @@ export class Auth extends Base {
     const data = { email, password, passwordConfirmation }
     return this.post('/signup', data)
   }
+
+  // TODO: remove this - just for testing authenticated route
+  static async users() {
+    return this.get<IUser[]>('/users')
+  }
 }

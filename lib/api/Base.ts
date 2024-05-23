@@ -48,7 +48,7 @@ class Base {
     },
   })
 
-  private static setupInterceptors = () => {
+  static setupInterceptors = () => {
     this.httpClient.interceptors.request.use(async (config) => {
       const authToken = await queryClient.getQueryData([AUTH_TOKEN_KEY])
 
@@ -108,4 +108,5 @@ class Base {
   }
 }
 
+Base.setupInterceptors()
 export default Base
