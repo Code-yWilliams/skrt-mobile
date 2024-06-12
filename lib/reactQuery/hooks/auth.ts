@@ -59,7 +59,7 @@ export const useInitialAuth = () => {
   const { isError, isPending } = useAuthenticateAccessToken()
 
   useEffect(() => {
-    if (isPending) return
+    if (isPending || initialized) return
 
     if (isError) {
       DeviceStorage.removeItem('user')
