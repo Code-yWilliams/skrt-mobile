@@ -112,6 +112,7 @@ export const useAuthMutations = () => {
 
       setCurrentUser(user)
       setAccessToken(accessToken)
+      // TODO: store refresh token
     },
     onError: (e) => {
       toaster.error(t('generic_error'))
