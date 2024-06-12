@@ -1,14 +1,14 @@
 import { Button, Text, View } from 'react-native'
-import { useAuthMutations, useAuthToken } from '~lib/reactQuery/hooks/auth'
+import { useAuthMutations, useAccessToken } from '~lib/reactQuery/hooks/auth'
 
 const Home = () => {
-  const authToken = useAuthToken()
+  const accessToken = useAccessToken()
   const { logout } = useAuthMutations()
 
   return (
     <View className="mt-[50px]">
       <Text>Poop</Text>
-      <Text>{authToken}</Text>
+      <Text>{accessToken}</Text>
       <Button onPress={() => logout()} title="logout" />
     </View>
   )

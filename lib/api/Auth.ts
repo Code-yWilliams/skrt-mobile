@@ -3,7 +3,8 @@ import Base from './Base'
 
 export type LoginResponse = {
   user: IUser
-  token: string
+  accessToken: string
+  refreshToken: string
 }
 
 export type signupResponse = {

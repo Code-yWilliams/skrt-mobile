@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import config from 'config'
 import humps from 'humps'
-import { AUTH_TOKEN_KEY } from '~lib/reactQuery/keys'
+import { ACCESS_TOKEN_KEY } from '~lib/reactQuery/keys'
 import { queryClient } from '~lib/reactQuery/queryClient'
 import DeviceStorage from '~lib/utils/DeviceStorage'
 
@@ -50,18 +50,18 @@ class Base {
 
   static setupInterceptors = () => {
     this.httpClient.interceptors.request.use(async (config) => {
-      const authToken = await queryClient.getQueryData([AUTH_TOKEN_KEY])
+      const accessToken = await queryClient.getQueryData([ACCESS_TOKEN_KEY])
 
-      if (authToken) {
-        config.headers.Authorization = `Bearer ${authToken}`
+      if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`
       }
       return config
     })
   }
 
-  private static async getAuthToken(): Promise<string | undefined> {
+  private static async getAccessToken(): Promise<string | undefined> {
     const storedUser = await DeviceStorage.getSecureItem('user')
-    return storedUser?.authToken
+    return storedUser?.accessToken
   }
 
   protected static async get<T>(

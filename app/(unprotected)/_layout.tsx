@@ -1,14 +1,14 @@
 import { Slot, router } from 'expo-router'
 import { useEffect } from 'react'
-import { useAuthToken, useCurrentUser } from '~lib/reactQuery/hooks/auth'
+import { useAccessToken, useCurrentUser } from '~lib/reactQuery/hooks/auth'
 
 const Layout = () => {
   const user = useCurrentUser()
-  const authToken = useAuthToken()
+  const accessToken = useAccessToken()
 
   useEffect(() => {
-    if (user && authToken) router.replace('/home')
-  }, [user, authToken])
+    if (user && accessToken) router.replace('/home')
+  }, [user, accessToken])
 
   return <Slot />
 }
