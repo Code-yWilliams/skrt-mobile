@@ -1,11 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { AUTH_TOKEN_KEY, CURRENT_USER_KEY } from '../keys'
+import { ACCESS_TOKEN_KEY, CURRENT_USER_KEY } from '../keys'
 import { IUser } from '@/interfaces/shared'
 import { Auth } from '~lib/api/Auth'
 import DeviceStorage from '~lib/utils/DeviceStorage'
 import { queryClient } from '../queryClient'
 import toaster from '~lib/toaster'
 import { t } from 'i18next'
+import { useEffect, useState } from 'react'
 
 export const useCurrentUser = () => {
   const { data } = useQuery({
@@ -26,11 +27,11 @@ const invalidateCurrentUser = () =>
     refetchType: 'active',
   })
 
-export const useAuthToken = () => {
+export const useAccessToken = () => {
   const { data } = useQuery({
-    queryKey: [AUTH_TOKEN_KEY],
+    queryKey: [ACCESS_TOKEN_KEY],
     queryFn: async () => {
-      const token = await DeviceStorage.getSecureItem('authToken')
+      const token = await DeviceStorage.getSecureItem('accessToken')
       return token || ''
     },
     staleTime: Infinity,
@@ -39,9 +40,41 @@ export const useAuthToken = () => {
   return data
 }
 
-const invalidateAuthToken = () =>
+export const useAuthenticateAccessToken = () => {
+  return useQuery({
+    queryKey: ['authenticateAccessToken'],
+    queryFn: async () => {
+      const response = await Auth.authenticateAccessToken()
+      if (!response.authenticated) {
+        throw new Error('User not authenticated')
+      }
+      return true
+    },
+  })
+}
+
+export const useInitialAuth = () => {
+  const [initialized, setInitialized] = useState(false)
+
+  const { isError, isPending } = useAuthenticateAccessToken()
+
+  useEffect(() => {
+    if (isPending) return
+
+    if (isError) {
+      DeviceStorage.removeItem('user')
+      DeviceStorage.removeSecureItem('accessToken')
+    }
+
+    setInitialized(true)
+  }, [isError, isPending])
+
+  return { initialized }
+}
+
+const invalidateAccessToken = () =>
   queryClient.invalidateQueries({
-    queryKey: [AUTH_TOKEN_KEY],
+    queryKey: [ACCESS_TOKEN_KEY],
     refetchType: 'active',
   })
 
@@ -50,9 +83,13 @@ export const storeCurrentUser = async (user: IUser) => {
   return user
 }
 
-export const storeAuthToken = async (token: string) => {
-  await DeviceStorage.setSecureItem('authToken', token)
+export const storeAccessToken = async (token: string) => {
+  await DeviceStorage.setSecureItem('accessToken', token)
   return token
+}
+
+export const removeAccessToken = async () => {
+  await DeviceStorage.removeSecureItem('accessToken')
 }
 
 export const useAuthMutations = () => {
@@ -61,9 +98,9 @@ export const useAuthMutations = () => {
     onSuccess: invalidateCurrentUser,
   })
 
-  const { mutate: setAuthToken } = useMutation({
-    mutationFn: storeAuthToken,
-    onSuccess: invalidateAuthToken,
+  const { mutate: setAccessToken } = useMutation({
+    mutationFn: storeAccessToken,
+    onSuccess: invalidateAccessToken,
   })
 
   const { mutate: login } = useMutation({
@@ -71,10 +108,10 @@ export const useAuthMutations = () => {
       return Auth.login(email, password)
     },
     onSuccess: (data): void => {
-      const { token, user } = data
+      const { accessToken, refreshToken, user } = data
 
       setCurrentUser(user)
-      setAuthToken(token)
+      setAccessToken(accessToken)
     },
     onError: (e) => {
       toaster.error(t('generic_error'))
@@ -84,10 +121,10 @@ export const useAuthMutations = () => {
   const { mutate: logout } = useMutation({
     mutationFn: async () => {
       await DeviceStorage.removeItem('user')
-      await DeviceStorage.removeSecureItem('authToken')
+      await DeviceStorage.removeSecureItem('accessToken')
     },
     onSuccess: () => {
-      invalidateAuthToken()
+      invalidateAccessToken()
       invalidateCurrentUser()
     },
   })
@@ -96,6 +133,6 @@ export const useAuthMutations = () => {
     login,
     logout,
     setCurrentUser,
-    setAuthToken,
+    setAccessToken,
   }
 }
