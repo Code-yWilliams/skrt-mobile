@@ -1,6 +1,6 @@
 import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Courgette_400Regular, useFonts } from '@expo-google-fonts/courgette'
 import Toast from 'react-native-toast-message'
 
