@@ -26,6 +26,13 @@ export class Auth extends Base {
     return this.post('/signup', data)
   }
 
+  static async authenticateAccessToken() {
+    const response = await this.get<{ authenticated: boolean }>(
+      '/authenticate_access_token',
+    )
+    return response
+  }
+
   // TODO: remove this - just for testing authenticated route
   static async users() {
     return this.get<IUser[]>('/users')

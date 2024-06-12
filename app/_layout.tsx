@@ -1,6 +1,6 @@
 import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Courgette_400Regular, useFonts } from '@expo-google-fonts/courgette'
 import Toast from 'react-native-toast-message'
 
@@ -11,6 +11,7 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context'
 import { QueryClientProvider } from '~lib/reactQuery/queryClient'
+import { useInitialAuth } from '~lib/reactQuery/hooks/auth'
 
 export {
   ErrorBoundary, // Catch any errors thrown by the Layout component.
@@ -28,6 +29,22 @@ SplashScreen.preventAutoHideAsync() // Prevent the splash screen from auto-hidin
 const RootLayoutNav = () => {
   const insets = useSafeAreaInsets()
 
+  const { initialized: authInitialized } = useInitialAuth()
+
+  const [fontsLoaded] = useFonts({
+    Courgette_400Regular,
+  })
+
+  useEffect(() => {
+    if (fontsLoaded && authInitialized) {
+      SplashScreen.hideAsync()
+    }
+  }, [fontsLoaded, authInitialized])
+
+  if (!fontsLoaded) {
+    return null
+  }
+
   return (
     <>
       <Slot />
@@ -37,20 +54,6 @@ const RootLayoutNav = () => {
 }
 
 const RootLayout = () => {
-  const [fontsLoaded] = useFonts({
-    Courgette_400Regular,
-  })
-
-  useEffect(() => {
-    if (fontsLoaded) {
-      SplashScreen.hideAsync()
-    }
-  }, [fontsLoaded])
-
-  if (!fontsLoaded) {
-    return null
-  }
-
   return (
     <>
       <QueryClientProvider>
