@@ -4,8 +4,6 @@ import { QueryClient } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import React from 'react'
 
-import { CURRENT_USER_KEY, AUTH_TOKEN_KEY } from './keys'
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -21,7 +19,7 @@ const asyncStoragePersister = createAsyncStoragePersister({
   storage: AsyncStorage,
 })
 
-// Only these query keys are written to async storage disk
+// Only these query keys will be written to async storage disk
 const KEYS_TO_PERSIST: string[] = []
 
 const QueryClientProvider = ({ children }: { children: React.ReactNode }) => (
