@@ -48,6 +48,8 @@ class Base {
     },
   })
 
+  // TODO: maybe setup interceptor to catch api JSON error responses and throw a js error for the app to handle
+
   static setupInterceptors = () => {
     this.httpClient.interceptors.request.use(async (config) => {
       const accessToken = await queryClient.getQueryData([ACCESS_TOKEN_KEY])
