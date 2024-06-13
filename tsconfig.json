@@ -7,6 +7,8 @@
       "~components/*": ["./components/*"],
       "~lib/*": ["./lib/*"],
       "~theme": ["./theme"],
+      "~stores/*": ["./lib/stores/*"],
+      "~contexts/*": ["./lib/contexts/*"],
       "@/*": ["./*"]
     }
   },
