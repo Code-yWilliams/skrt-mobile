@@ -35,6 +35,8 @@
     "humps": "^2.0.1",
     "i18next": "^23.10.1",
     "intl-pluralrules": "^2.0.1",
+    "mobx": "^6.12.3",
+    "mobx-react-lite": "^4.0.7",
     "nativewind": "^2.0.11",
     "react": "^18.2.0",
     "react-dom": "18.2.0",
