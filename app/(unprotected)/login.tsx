@@ -8,11 +8,11 @@ import {
 } from 'react-native'
 import { ThemedButton, ThemedTextInput } from '~components/themed'
 import { Formik } from 'formik'
-import { useAuthMutations } from '~lib/reactQuery/hooks/auth'
 import { GestureHandlerEvent } from 'react-native-reanimated/lib/typescript/reanimated2/hook'
+import { useUserStore } from '~lib/stores/hooks'
 
 const Login = () => {
-  const { login } = useAuthMutations()
+  const { login } = useUserStore()
 
   return (
     <SafeAreaView className="flex-1 items-center justify-center">

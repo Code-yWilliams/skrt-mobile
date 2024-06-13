@@ -1,16 +1,13 @@
-import { Slot, router } from 'expo-router'
-import { useEffect } from 'react'
-import { useAccessToken, useCurrentUser } from '~lib/reactQuery/hooks/auth'
+import { Redirect, Slot } from 'expo-router'
+import { observer } from 'mobx-react-lite'
+import { useCurrentUser } from '~lib/stores/hooks'
 
-const ProtectedLayout = () => {
+const ProtectedLayout = observer(() => {
   const user = useCurrentUser()
-  const accessToken = useAccessToken()
 
-  useEffect(() => {
-    if (!user || !accessToken) return router.replace('/login')
-  }, [user, accessToken])
+  if (!user) return <Redirect href="/login" />
 
   return <Slot />
-}
+})
 
 export default ProtectedLayout
