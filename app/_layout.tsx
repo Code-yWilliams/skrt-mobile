@@ -10,8 +10,10 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context'
-import { QueryClientProvider } from '~lib/reactQuery/queryClient'
-import { useInitialAuth } from '~lib/reactQuery/hooks/auth'
+import { QueryClientProvider } from '~lib/query/queryClient'
+import { Provider as StoreProvider } from '~contexts/storeContext'
+import { useRootStore, useUserStore } from '~lib/stores/hooks'
+import { observer } from 'mobx-react-lite'
 
 export {
   ErrorBoundary, // Catch any errors thrown by the Layout component.
@@ -26,10 +28,10 @@ setupI18n()
 
 SplashScreen.preventAutoHideAsync() // Prevent the splash screen from auto-hiding before asset loading is complete.
 
-const RootLayoutNav = () => {
+const RootLayoutNav = observer(() => {
   const insets = useSafeAreaInsets()
 
-  const { initialized: authInitialized } = useInitialAuth()
+  const { initialized: authInitialized } = useUserStore()
 
   const [fontsLoaded] = useFonts({
     Courgette_400Regular,
@@ -51,18 +53,22 @@ const RootLayoutNav = () => {
       <Toast config={toastConfig} topOffset={insets.top} />
     </>
   )
-}
+})
 
-const RootLayout = () => {
+const RootLayout = observer(() => {
+  const rootStore = useRootStore()
+
   return (
     <>
-      <QueryClientProvider>
-        <SafeAreaProvider>
-          <RootLayoutNav />
-        </SafeAreaProvider>
-      </QueryClientProvider>
+      <StoreProvider value={rootStore}>
+        <QueryClientProvider>
+          <SafeAreaProvider>
+            <RootLayoutNav />
+          </SafeAreaProvider>
+        </QueryClientProvider>
+      </StoreProvider>
     </>
   )
-}
+})
 
 export default RootLayout
