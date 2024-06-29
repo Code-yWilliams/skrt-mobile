@@ -28,33 +28,32 @@ class UserStore {
 
     if (!user || !accessToken) return
 
-    const cheese = await Auth.authenticateAccessToken()
+    const response = await Auth.authenticateAccessToken()
 
-    if (!cheese.authenticated) return
+    if (!response.authenticated) return
 
     this.setCurrentUser(user)
   }
 
   login = async ({ email, password }: { email: string; password: string }) => {
-    this.setLoading(true)
-    console.log('APPLE')
+    try {
+      this.setLoading(true)
+      const { user, accessToken, refreshToken } = await Auth.login(
+        email,
+        password,
+      )
 
-    const { user, accessToken, refreshToken } = await Auth.login(
-      email,
-      password,
-    )
+      await Promise.all([
+        DeviceStorage.setItem('user', user),
+        DeviceStorage.setSecureItem('accessToken', accessToken),
+        DeviceStorage.setSecureItem('refreshToken', refreshToken),
+      ])
 
-    console.log({ user, accessToken, refreshToken })
-
-    await Promise.all([
-      DeviceStorage.setItem('user', user),
-      DeviceStorage.setSecureItem('accessToken', accessToken),
-      DeviceStorage.setSecureItem('refreshToken', refreshToken),
-    ])
-
-    this.setCurrentUser(user)
-
-    this.setLoading(false)
+      this.setCurrentUser(user)
+    } catch (error) {
+    } finally {
+      this.setLoading(false)
+    }
   }
 
   logout = () => {
