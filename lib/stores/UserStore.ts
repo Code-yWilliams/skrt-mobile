@@ -18,19 +18,22 @@ class UserStore {
   }
 
   initialize = async () => {
-    await this.loginFromStoredCredentials()
-    this.setInitialized(true)
+    try {
+      await this.loginFromStoredCredentials()
+    } catch {
+    } finally {
+      this.setInitialized(true)
+    }
   }
 
   loginFromStoredCredentials = async () => {
-    const user = await DeviceStorage.getItem('user')
-    const accessToken = await DeviceStorage.getSecureItem('accessToken')
+    const user = await DeviceStorage.getSecureItem('user')
 
-    if (!user || !accessToken) return
+    if (!user) return
 
-    const response = await Auth.authenticateAccessToken()
+    const authenticated = await Auth.authenticateMobileAuthToken()
 
-    if (!response.authenticated) return
+    if (!authenticated) return
 
     this.setCurrentUser(user)
   }
@@ -38,17 +41,10 @@ class UserStore {
   login = async ({ email, password }: { email: string; password: string }) => {
     try {
       this.setLoading(true)
-      const { user, accessToken, refreshToken } = await Auth.login(
-        email,
-        password,
-      )
+      const { user } = await Auth.login(email, password)
+      console.log({ user })
 
-      await Promise.all([
-        DeviceStorage.setItem('user', user),
-        DeviceStorage.setSecureItem('accessToken', accessToken),
-        DeviceStorage.setSecureItem('refreshToken', refreshToken),
-      ])
-
+      await DeviceStorage.setSecureItem('user', user)
       this.setCurrentUser(user)
     } catch (error) {
     } finally {
@@ -58,9 +54,7 @@ class UserStore {
 
   logout = () => {
     this.setCurrentUser(null)
-    DeviceStorage.removeItem('user')
-    DeviceStorage.removeSecureItem('accessToken')
-    DeviceStorage.removeSecureItem('refreshToken')
+    DeviceStorage.removeSecureItem('user')
   }
 
   setCurrentUser = (user: IUser | null) => {

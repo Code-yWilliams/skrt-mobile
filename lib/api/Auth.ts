@@ -14,7 +14,7 @@ export type signupResponse = {
 export class Auth extends Base {
   static async login(email: string, password: string): Promise<LoginResponse> {
     const data = { email, password }
-    return this.post('/login', data)
+    return this.post('/sessions', data)
   }
 
   static async signup(
@@ -26,11 +26,11 @@ export class Auth extends Base {
     return this.post('/signup', data)
   }
 
-  static async authenticateAccessToken() {
-    const response = await this.get<{ authenticated: boolean }>(
+  static async authenticateMobileAuthToken() {
+    const authenticated = await this.get<{ status: boolean }>(
       '/authenticate_access_token',
     )
-    return response
+    return authenticated
   }
 
   // TODO: remove this - just for testing authenticated route

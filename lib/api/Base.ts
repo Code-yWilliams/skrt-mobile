@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import config from 'config'
 import humps from 'humps'
 import DeviceStorage from '~lib/utils/DeviceStorage'
+import base64 from 'react-native-base64'
 
 const { HOST, BASE_PATH } = config
 
@@ -50,18 +51,20 @@ class Base {
 
   static setupInterceptors = () => {
     this.httpClient.interceptors.request.use(async (config) => {
-      const accessToken = await DeviceStorage.getSecureItem('accessToken')
-
-      if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`
-      }
+      const authHeader = await this.authHeader()
+      config.headers.Authorization = authHeader
       return config
     })
   }
 
-  private static async getAccessToken(): Promise<string | undefined> {
+  protected static async authHeader() {
     const storedUser = await DeviceStorage.getSecureItem('user')
-    return storedUser?.accessToken
+    if (!storedUser) return ''
+
+    const { email, mobileAuthToken } = storedUser
+    console.log({ email })
+    const auth = base64.encode(`${email}:${mobileAuthToken}`)
+    return `Basic ${auth}`
   }
 
   protected static async get<T>(
