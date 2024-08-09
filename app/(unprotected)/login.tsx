@@ -10,6 +10,7 @@ import { ThemedButton, ThemedTextInput } from '~components/themed'
 import { Formik } from 'formik'
 import { GestureHandlerEvent } from 'react-native-reanimated/lib/typescript/reanimated2/hook'
 import { useUserStore } from '~lib/stores/hooks'
+import { appName } from '@/constants/strings'
 
 const Login = () => {
   const { login } = useUserStore()
@@ -32,7 +33,7 @@ const Login = () => {
               color: colors.green[500],
             }}
           >
-            GiftShit
+            {appName}
           </Text>
           <Formik onSubmit={login} initialValues={{ email: '', password: '' }}>
             {({ handleChange, handleBlur, handleSubmit, values }) => (
