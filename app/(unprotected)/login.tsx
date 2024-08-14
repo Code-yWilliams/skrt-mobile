@@ -27,7 +27,7 @@ const Login = () => {
         >
           <Text
             style={{
-              fontFamily: 'Courgette_400Regular',
+              fontFamily: 'courgette',
               marginBottom: 12,
               fontSize: 38,
               color: colors.green[500],

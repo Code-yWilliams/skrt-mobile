@@ -33,19 +33,11 @@ const RootLayoutNav = observer(() => {
 
   const { initialized: authInitialized } = useUserStore()
 
-  const [fontsLoaded] = useFonts({
-    Courgette_400Regular,
-  })
-
   useEffect(() => {
-    if (fontsLoaded && authInitialized) {
+    if (authInitialized) {
       SplashScreen.hideAsync()
     }
-  }, [fontsLoaded, authInitialized])
-
-  if (!fontsLoaded) {
-    return null
-  }
+  }, [authInitialized])
 
   return (
     <>
