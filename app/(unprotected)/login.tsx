@@ -61,6 +61,7 @@ const Login = () => {
                   onPress={
                     handleSubmit as (e: GestureHandlerEvent<any>) => void
                   }
+                  disabled={!values.email || !values.password}
                 >
                   {t('log_in')}
                 </ThemedButton>
