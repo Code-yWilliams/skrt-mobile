@@ -21,7 +21,7 @@
     "@tanstack/react-query": "^5.32.0",
     "@tanstack/react-query-persist-client": "^5.32.0",
     "axios": "^1.6.8",
-    "expo": "^51.0.26",
+    "expo": "^51.0.27",
     "expo-font": "~11.10.3",
     "expo-linking": "~6.2.2",
     "expo-localization": "~14.8.4",
