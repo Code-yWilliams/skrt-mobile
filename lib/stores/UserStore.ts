@@ -42,7 +42,6 @@ class UserStore {
     try {
       this.setLoading(true)
       const { user } = await Auth.login(email, password)
-      console.log({ user })
 
       await DeviceStorage.setSecureItem('user', user)
       this.setCurrentUser(user)

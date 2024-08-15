@@ -62,7 +62,6 @@ class Base {
     if (!storedUser) return ''
 
     const { email, mobileAuthToken } = storedUser
-    console.log({ email })
     const auth = base64.encode(`${email}:${mobileAuthToken}`)
     return `Basic ${auth}`
   }
