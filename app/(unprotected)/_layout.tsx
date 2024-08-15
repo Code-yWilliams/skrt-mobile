@@ -1,13 +1,12 @@
 import { Redirect, Slot } from 'expo-router'
-import { observer } from 'mobx-react-lite'
-import { useCurrentUser } from '~lib/stores/hooks'
+import { useUserQuery } from '~lib/query/hooks/useUser'
 
-const Layout = observer(() => {
-  const user = useCurrentUser()
+const Layout = () => {
+  const user = useUserQuery()
 
   if (user) return <Redirect href="/lists" />
 
   return <Slot />
-})
+}
 
 export default Layout

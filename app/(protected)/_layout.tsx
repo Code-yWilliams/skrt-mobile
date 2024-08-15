@@ -1,9 +1,8 @@
-import { Redirect, Slot, Stack } from 'expo-router'
-import { observer } from 'mobx-react-lite'
-import { useCurrentUser } from '~lib/stores/hooks'
+import { Redirect, Stack } from 'expo-router'
+import { useUserQuery } from '~lib/query/hooks/useUser'
 
-const ProtectedLayout = observer(() => {
-  const user = useCurrentUser()
+const ProtectedLayout = () => {
+  const user = useUserQuery()
 
   if (!user) return <Redirect href="/login" />
 
@@ -12,6 +11,6 @@ const ProtectedLayout = observer(() => {
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
   )
-})
+}
 
 export default ProtectedLayout
