@@ -5,7 +5,7 @@ import { useCurrentUser } from '~lib/stores/hooks'
 const Layout = observer(() => {
   const user = useCurrentUser()
 
-  if (user) return <Redirect href="/home" />
+  if (user) return <Redirect href="/lists" />
 
   return <Slot />
 })
